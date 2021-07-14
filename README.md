@@ -1,2 +1,2 @@
 # JSproject
-make mini project using javascript
+projects using javascript
