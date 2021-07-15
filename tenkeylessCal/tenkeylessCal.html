@@ -62,18 +62,19 @@
 
         //키 입력시의 효과 함수 지정(value 창에 뜨게 하기, 값 변수에 저장하기)
 
-        //안되는 함수
+
         // function removeClass(key) {
         //     document.getElementById(key.key).classList.remove('keyIn')
         // }
        const thisKeydown = (e) =>{
         const key = document.getElementById(e.key);
         if(key && !(firstNum === '' && howtoCal.includes(e.key))) key.classList.add("keyIn")
+          //첫 숫자가 없이 부호만 누르면 애초에 keydown 이벤트인 classList.add 가 일어나지 않게 하기
         if(firstNum === '' && howtoCal.includes(e.key)){
             $cal.value = ''
             ammd = ''
             // removeClass(e)
-            //안되는 이유? =>누를때의 이벤트이기 때문(뗄 때가 아니라)
+            //removeClass 함수가 안되는 이유? =>누를때의 이벤트이기 때문(뗄 때가 아니라)
             alert("숫자를 먼저 입력해 주세요")
 
         }else{
@@ -94,7 +95,7 @@
         }
        
 
-
+        //선택된 연산자에 따른 결과값 계산방법
         if(e.key === ']' && secNum){
             $cal.value = document.querySelector('#'+'\\'+e.key).textContent
             if(ammd === "+"){
@@ -118,28 +119,6 @@
         const key = document.getElementById(e.key);
         if(key) {key.classList.remove("keyIn")}
     });
-       
-    console.log(document.getElementById("j"))
-
-
-    //키보드를 눌렀을 때 누르는 이펙트 발생하게 하기
-    //첫 숫자가 없이 부호만 누르면 애초에 keydown 이벤트가 일어나지 않게 하기
-    //    document.addEventListener("keydown", (e)=>{     
-        
-    // });
-    
-
-
-
-
-
-
-
-
-
-
-
-
-    </script>
+     </script>
 
 </html>
