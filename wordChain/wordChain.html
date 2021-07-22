@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>끝말잇기</title>
+</head>
+<body>
+
+    <div>
+        <span id='personNum'>1</span>번째 참가자
+    </div>
+    <div id='displayWord'>
+
+    </div>
+    <div>
+        남은시간: <span id='leftTime'></span>초
+    </div>
+    <div>
+        <input type="text" id='inputText'></input>
+        <button id='submitBtn'>제출</button>
+    </div>
+    <div id='output'>
+
+    </div>
+<script>
+    let peopleNum = prompt('총 몇명인가요?');
+    //if로만 하면 한번 돌고 끝나기 때문에 while 사용
+    // if(isNaN(peopleNum)){
+    //     alert('숫자를 다시 입력해 주세요')
+    //     const peopleNum = Number(prompt('총 몇명인가요?'));
+    // }
+    while((isNaN(peopleNum)) == true || (peopleNum>=100) == true){
+        alert('숫자를 다시 입력해 주세요')
+        //let으로 변수  설정후 입력해야 peopleNum 값이 바뀜. const로 하면 바뀌지 않음
+        peopleNum = (prompt('총 몇명인가요?'));  
+    }
+
+  
+    const $displayWord = document.getElementById('displayWord');
+    const $personNum = document.getElementById('personNum');
+    const $leftTime = document.getElementById('leftTime')
+    const $submitBtn = document.getElementById('submitBtn');
+    const $output = document.getElementById('output');
+    const $inputText = document.getElementById('inputText');
+    let showWord ='';
+    let submitText ='';
+    let beforeAns = '';
+    let personNumber = 1;
+    let wrongTxt = '';
+    let time = 15;
+
+    //함수가 실행되기 전에 시간을 써놓지 않으면 15초가 안보임
+    $leftTime.textContent = time;
+    //시간이 줄어들게 setInterval로 1초마다 time에서 1씩 뺌
+    const timer = setInterval(function(){
+        time -= 1;
+        $leftTime.textContent = time;
+        if(time === 0){
+            personNumber = 1;
+            //이부분을 함수 밖에다 써놓으면 참가자 번호가 초기화가 안됨
+            $personNum.textContent = personNumber;
+            alert('패배하였습니다')
+            //처음부터 게임 다시 시작
+            time = 15;
+            $output.textContent ='';
+            $inputText.value = ''
+        }
+    },1000)
+
+
+    
+    const inputTxt = (e)=>{
+        $inputText.textContent = e.target.value;
+      };
+    const showTxt = (e)=>{
+        beforeAns = $output.textContent
+        //끝말잇기가 안되면(전 참가자가 쓴 마지막 글자와 현재 참가자가 쓴 첫글자가 같지 않은 경우) 다시 초기화
+        if(!(personNumber === 1) && (beforeAns[beforeAns.length-1] !== $inputText.value[0])){
+            alert('잘못된 답입니다')
+            personNumber =0;
+            $inputText.value = ''
+            $output.textContent = ''
+
+        }
+        for(let i=0;i<$inputText.textContent.length;i++){
+            if(!isNaN($inputText.textContent[i])){
+                wrongTxt = i
+                if(!$output.textContent){
+                    //$inputText.value = ''가 되고나서 밑에 if else로 output text를 beforeAns
+                    //로 해주려니 사라지는 버그가 생김. 애초에 input value 초기화할 떄 이미 써져있는
+                    //글자가 변하지 않게 지정해주는게 버그 방지를 할수있는 듯 함.
+                    $inputText.value = ''
+                    $output.textContent = beforeAns
+                    alert('숫자는 쓸수 없습니다') 
+                    break; 
+                }else{
+                $inputText.value = ''
+                $output.textContent = beforeAns
+                alert('숫자는 쓸수 없습니다') 
+                break;           
+            }}
+        }
+        //숫자가 섞여있을 경우엔 참가자 숫자가 올라가지 않음
+        if(isNaN($inputText.textContent[wrongTxt])){
+            if($inputText.value !== ''){
+            $output.textContent = $inputText.value
+            }
+            //참가자 번호 증가, 시간 초기화
+            personNumber +=1
+            time = 15;
+            $personNum.textContent = personNumber;
+            $leftTime.textContent = time;
+            if(personNumber === Number(peopleNum)){
+                //버튼을 누르자마자 1이 올라가기 때문에 0으로 지정해줌
+                personNumber = 0;
+            }
+        }
+    };
+
+
+    $submitBtn.addEventListener('click',showTxt);
+    $inputText.addEventListener('input', inputTxt);
+
+
+</script>
+</body>
+</html>
