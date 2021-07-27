@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주식투자</title>
+    <style>
+        #chartBox{
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+        }
+        #firstChart,#secondChart{
+            position: relative;
+            display: inline-block;
+            width: 100px;
+            height: 200px;
+        }
+        #FirUp,#SecUp{
+            width: 100px;
+            height: 100px;
+            background-color: rgb(245, 91, 91);
+        }
+        #FirDn,#SecDn{
+            position: relative;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background-color: rgb(63, 142, 245);
+        }
+    </style>
+</head>
+<body>
+    <div>지금 얼마?</div>
+    <div id="nowValue"></div>
+    <div>
+        <span id="chartBox"><span id="firstChart"><div id="FirUp"></div></span><span id="secondChart"><div id="SecDn"></div></span>
+        </span>
+    </div>
+    <button id="buyBtn">사자</button>
+    <button id="sellBtn">팔자</button>
+    <div>남은 금액 : <span id="money"></span></div>
+    <div>보유 주식 : <span id="stock"></span></div>
+    <script>
+        const twoVal = Array(2).fill().map((a,i)=>i+1)
+        let totalVal = 0;
+        let leftMoney = 20;
+        let leftStock = 0;
+        document.getElementById("money").textContent = leftMoney
+        document.getElementById("buyBtn").addEventListener("click",()=>{leftMoney = leftMoney-totalVal})
+        
+        setInterval(()=>{
+            let POne = document.getElementById("firstChart")
+            let PTwo = document.getElementById("secondChart")
+            // document.getElementById("FirUp") ? POne.removeChild(document.getElementById("FirUp")) : POne.removeChild(document.getElementById("FirDn"))
+            // document.getElementById("SecUp") ? PTwo.removeChild(document.getElementById("SecUp")) : PTwo.removeChild(document.getElementById("SecDn"))
+            let PM = 1;
+            if(Math.random()<0.5){
+                PM = PM*(-1)
+            }
+            const nowCost = Math.floor(Math.random()*10+1)*(PM);
+            twoVal.push(nowCost);
+            twoVal.shift()
+            //twoVal을 밖으로 꺼내면 값이 나오지 않는 이유?
+            if(twoVal[0]>0 && document.getElementById("FirDn")){
+                let P = document.getElementById("FirDn");
+                P.id = "FirUp"
+            }else if(twoVal[0]<0 && document.getElementById("FirUp")){
+                let P = document.getElementById("FirUp");
+                P.id = "FirDn"
+            }
+            if(twoVal[1]>0 && document.getElementById("SecDn")){
+                let P = document.getElementById("SecDn");
+                P.id = "SecUp"
+            }else if(twoVal[1]<0 && document.getElementById("SecUp")){
+                let P = document.getElementById("SecUp");
+                P.id = "SecDn"
+            }
+            //음수로 내려가지 않게 만들기
+            totalVal += twoVal[1]
+            if(totalVal<0){
+                totalVal = 0
+            }
+            console.log(totalVal)
+            document.getElementById("nowValue").textContent = totalVal  
+            document.getElementById("money").textContent = leftMoney
+            
+        
+           },3000);
+
+           
+        
+    </script>
+</body>
+</html>
