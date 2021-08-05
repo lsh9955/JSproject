@@ -75,7 +75,7 @@
         } else if (event.target.textContent == "") {
           forbiddenAlert.textContent = "";
           event.target.textContent = thisturn;
-          findposition();
+          findposition;
 
           thisturn = thisturn === "O" ? "X" : "O";
         }
@@ -139,7 +139,10 @@
             }
           }
         }
-
+        if (willChange == "") {
+          $body.appendChild(forbiddenAlert);
+          forbiddenAlert.textContent = "놓을 수 없는 자리입니다";
+        }
         willChange = [];
       }
 
