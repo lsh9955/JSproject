@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>othelloo</title>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+      td {
+        border: 1px solid black;
+        width: 22px;
+        height: 22px;
+        text-align: center;
+      }
+      div {
+        width: 200px;
+        height: 22px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const box = [];
+      const table = document.createElement("table");
+      const forbiddenAlert = document.createElement("div");
+      const output = document.createElement("div");
+      const $body = document.body;
+
+      let thisturn = "O";
+      //createElement 말고 appendchild까지 해 줘야 하는 이유?
+      const callback = (target) => {
+        let le = document.getElementById(
+          Number(event.target.id) - 1
+        ).textContent;
+        let ri = document.getElementById(
+          Number(event.target.id) + 1
+        ).textContent;
+        let dn = document.getElementById(
+          Number(event.target.id) - 10
+        ).textContent;
+        let up = document.getElementById(
+          Number(event.target.id) + 10
+        ).textContent;
+        let leup = document.getElementById(
+          Number(event.target.id) - 11
+        ).textContent;
+        let riup = document.getElementById(
+          Number(event.target.id) - 9
+        ).textContent;
+        let ledn = document.getElementById(
+          Number(event.target.id) + 9
+        ).textContent;
+        let ridn = document.getElementById(
+          Number(event.target.id) + 11
+        ).textContent;
+        console.log(leup || ri);
+        if (event.target.textContent) {
+          $body.appendChild(forbiddenAlert);
+          forbiddenAlert.textContent = "이미 클릭했습니다";
+        } else if (
+          le == "" &&
+          ri == "" &&
+          dn == "" &&
+          up == "" &&
+          leup == "" &&
+          riup == "" &&
+          ledn == "" &&
+          ridn == ""
+        ) {
+          $body.appendChild(forbiddenAlert);
+          forbiddenAlert.textContent = "놓을 수 없는 자리입니다";
+        } else if (event.target.textContent == "") {
+          forbiddenAlert.textContent = "";
+          event.target.textContent = thisturn;
+          findposition();
+
+          thisturn = thisturn === "O" ? "X" : "O";
+        }
+      };
+      function findposition() {
+        let le = document.getElementById(
+          Number(event.target.id) - 1
+        ).textContent;
+        let ri = document.getElementById(
+          Number(event.target.id) + 1
+        ).textContent;
+        let dn = document.getElementById(
+          Number(event.target.id) - 10
+        ).textContent;
+        let up = document.getElementById(
+          Number(event.target.id) + 10
+        ).textContent;
+        let leup = document.getElementById(
+          Number(event.target.id) - 11
+        ).textContent;
+        let riup = document.getElementById(
+          Number(event.target.id) - 9
+        ).textContent;
+        let ledn = document.getElementById(
+          Number(event.target.id) + 9
+        ).textContent;
+        let ridn = document.getElementById(
+          Number(event.target.id) + 11
+        ).textContent;
+        let nowWhere = Number(event.target.id);
+        let willChange = [];
+        let findIndex = [
+          le,
+          ri,
+          dn,
+          up,
+          leup,
+          riup,
+          ledn,
+          ridn - 1,
+          1,
+          -10,
+          10,
+          -11,
+          -9,
+          9,
+          11,
+        ];
+        for (let p = 0; p < 8; p++) {
+          if (findIndex[p] !== thisturn) {
+            willChange.push(findIndex[p]);
+            for (let j = 8; j < 16; j++) {
+              nowWhere += findIndex[p];
+              willChange.push(nowWhere);
+              console.log(willChange);
+              if (document.getElementById(nowWhere).textContent == thisturn) {
+                for (let q = 0; q < willChange.length; q++) {
+                  document.getElementById(willChange[q]).textContent = thisturn;
+                }
+              }
+            }
+          }
+        }
+
+        willChange = [];
+      }
+
+      for (let i = 1; i <= 8; i++) {
+        const line = document.createElement("tr");
+
+        const linecell = [];
+
+        for (let j = 1; j <= 8; j++) {
+          const vertical = document.createElement("td");
+          vertical.id = `${i}${j}`;
+          if (vertical.id === "44" || vertical.id === "55") {
+            vertical.textContent = "O";
+          } else if (vertical.id === "45" || vertical.id === "54") {
+            vertical.textContent = "X";
+          } else {
+            vertical.textContent = "";
+          }
+          linecell.push(vertical);
+          line.appendChild(vertical);
+        }
+        box.push(linecell);
+        table.appendChild(line);
+        table.addEventListener("click", callback);
+      }
+      $body.appendChild(table);
+      $body.appendChild(output);
+    </script>
+  </body>
+</html>
