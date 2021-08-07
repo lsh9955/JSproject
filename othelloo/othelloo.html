@@ -109,9 +109,8 @@
 
             if (findIndex[p] === (thisturn === "O" ? "X" : "O")) {
               for (let w = 0; w <= 16; w++) {
-                console.log(nowWhere);
                 nowWhere += findIndex[p + 8];
-                console.log(nowWhere);
+
                 if (isNaN(nowWhere)) {
                   continue;
                 }
@@ -125,8 +124,6 @@
 
                   break;
                 } else if (
-                  document.getElementById(nowWhere + findIndex[p + 8])
-                    .textContent &&
                   document.getElementById(nowWhere + findIndex[p + 8])
                     .textContent == ""
                 ) {
