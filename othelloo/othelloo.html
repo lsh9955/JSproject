@@ -119,11 +119,16 @@
                   document.getElementById(nowWhere).textContent == thisturn &&
                   document.getElementById(nowWhere + findIndex[p + 8])
                     .textContent == ""
+                  //수정한 부분
+                  // &&document.getElementById(nowWhere - findIndex[p + 8])
+                  //   .textContent !== thisturn
                 ) {
                   willChange.push([p, w]);
-
-                  break;
+                  // break;
                 } else if (
+                  //null오류나는 부분을 ||밑에다 넣으니 오류가 없어짐
+                  document.getElementById(nowWhere + findIndex[p + 8]) ===
+                    null ||
                   document.getElementById(nowWhere + findIndex[p + 8])
                     .textContent == ""
                 ) {
@@ -143,6 +148,7 @@
             $body.appendChild(forbiddenAlert);
             forbiddenAlert.textContent = "놓을 수 없는 자리입니다";
           } else {
+            // for (let m = 0; m < willChange.length; m++) {
             for (let c = 0; c < willChange[0][1]; c++) {
               nowWhere += findIndex[willChange[0][0] + 8];
 
@@ -151,6 +157,7 @@
                   ? "X"
                   : "O";
             }
+            // }
             event.target.textContent = thisturn;
             thisturn = thisturn === "O" ? "X" : "O";
           }
