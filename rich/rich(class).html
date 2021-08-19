@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>부자되기</title>
+    <style>
+      span {
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 처음 화면 -->
+    <div id="firstScreen">
+      <div>부자되기</div>
+      <form id="nameInput">
+        <div>이름을 입력해주세요</div>
+        <input type="text" id="userName" />
+        <button id="nameInputBtn">확인</button>
+      </form>
+    </div>
+    <!-- 메인 화면 -->
+    <div id="main">
+      <div>메인화면</div>
+      <button id="work">아르바이트</button>
+      <button id="eat">밥먹기</button>
+      <button id="sleep">취침</button>
+    </div>
+    <button id="backtoMain">메인화면으로</button>
+    <button id="levelUp">레벨업</button>
+
+    <!-- 아르바이트 -->
+    <div id="workMain">
+      <div>&lt;아르바이트&gt;</div>
+      <br />
+      <div>
+        설명<br />
+        (Lv 1 이상) 편의점 : 체력 -1 / 정신력 -1 / 잔액 +10 <br />
+        (Lv 3 이상) 식당 : 체력 -10 / 정신력 -10 / 잔액 +100 <br />
+        (Lv 5 이상) 학원 : 체력 -50 / 정신력 -50 / 잔액 +500 <br />
+      </div>
+
+      <button id="workOne">편의점</button>
+      <button id="workTwo">식당</button>
+      <button id="workThree">학원</button>
+    </div>
+    <!-- 밥먹기 -->
+    <div id="eatMain">
+      <div>&lt;밥먹기&gt;</div>
+      <br />
+      <div>
+        설명<br />
+        (Lv 1 이상) 컵라면 : 체력 +1 / 잔액 -1 <br />
+        (Lv 3 이상) 국밥 : 체력 +10 / 잔액 -10 <br />
+        (Lv 5 이상) 소고기 : 체력 +50 / 잔액 -50 <br />
+      </div>
+
+      <button id="eatOne">컵라면</button>
+      <button id="eatTwo">국밥</button>
+      <button id="eatThree">소고기</button>
+    </div>
+
+    <!-- 취침 -->
+    <div id="sleepMain">
+      <div>&lt;취침&gt;</div>
+      <br />
+      <div>
+        설명<br />
+        (Lv 1 이상) 돗자리 : 정신력 +1 / 잔액 -1 <br />
+        (Lv 3 이상) 이불 : 정신력 +10 / 잔액 -10 <br />
+        (Lv 5 이상) 호텔 : 정신력 +50 / 잔액 -50 <br />
+      </div>
+
+      <button id="sleepOne">돗자리</button>
+      <button id="sleepTwo">이불</button>
+      <button id="sleepThree">호텔</button>
+    </div>
+
+    <!-- 캐릭터 상태 표시 -->
+    <div id="playerState">
+      <div>
+        플레이어 이름 :
+        <span id="playerName"></span>
+      </div>
+
+      <div>
+        현재 체력 :<span id="nowHp"></span>&nbsp(최대 체력 :&nbsp<span
+          id="maxHp"
+        ></span
+        >)
+      </div>
+
+      <div>
+        현재 정신력 : <span id="nowMp"></span>&nbsp(최대 정신력 :&nbsp<span
+          id="maxMp"
+        ></span
+        >)
+      </div>
+
+      <div>현재 잔액 : <span id="nowMoney"></span></div>
+
+      <div>레벨 : <span id="nowLevel"></span></div>
+      <div>레벨업 필요금액 : <span id="levelCost"></span></div>
+      <div id="notAllowed"></div>
+    </div>
+  </body>
+  <script>
+    //class의 구분?
+    //게임 내 실행창의 구분-클릭시의 이벤트도 따로 클래스로 분리해야할듯?, 표시창, 플레이어-서로 분리해보기
+    //clss이름뒤에 () 붙이면 안됨
+    class GamePage {
+      //여기로 where이 어떤 인수가 들어올줄 알고?
+      constructor(where) {
+        //맨 처음 들어갈때는 메인페이지가 우선이므로
+        //이름을 어떤 방식으로 지어야 할지?
+        //함수 뒤에 ()을 쳐 줘야 하는 이유?
+        this.start();
+        // this.firPage === 1 ? this.showPage(). :
+        // this.mainPage === 1 ? this.showPage(). :
+        // this.workPage === 1 ? this.showPage(). :
+        // this.eatPage === 1 ? this.showPage(). :
+        // this.sleepPage === 1 ? this.showPage(). :
+      }
+      start() {
+        document.getElementById("firstScreen").style.display = "";
+        document.getElementById("playerState").style.display = "none";
+        document.getElementById("backtoMain").style.display = "none";
+        document.getElementById("levelUp").style.display = "none";
+        document.getElementById("main").style.display = "none";
+        document.getElementById("workMain").style.display = "none";
+        document.getElementById("eatMain").style.display = "none";
+        document.getElementById("sleepMain").style.display = "none";
+        //연결이 되어 있으면 안됨.
+      }
+      changePage(where) {
+        //전체를 다 초기화 (0)으로 한 다음, target 페이지에만 1을 할당
+        document.getElementById("firstScreen").style.display = "none";
+        document.getElementById("playerState").style.display = "none";
+        document.getElementById("backtoMain").style.display = "none";
+        document.getElementById("levelUp").style.display = "none";
+        document.getElementById("main").style.display = "none";
+        document.getElementById("workMain").style.display = "none";
+        document.getElementById("eatMain").style.display = "none";
+        document.getElementById("sleepMain").style.display = "none";
+        document.getElementById("sleepMain").style.display = "none";
+
+        document.getElementById(`${where}`).style.display = "";
+        if (where !== "firstScreen" && where !== "main") {
+          document.getElementById("backtoMain").style.display = "";
+        }
+      }
+
+      //   nowState(index) {
+      //     document.getElementById();
+      //     this.firPage = 1;
+      //     this.mainPage = 0;
+      //     this.workPage = 0;
+      //     this.eatPage = 0;
+      //     this.sleepPage = 0;
+      //   }
+    }
+    new GamePage();
+    document
+      .getElementById("nameInputBtn")
+      .addEventListener("click", .changePage("main"));
+  </script>
+</html>
