@@ -15,11 +15,11 @@
     <!-- 처음 화면 -->
     <div id="firstScreen">
       <div>부자되기</div>
-      <form id="nameInput">
-        <div>이름을 입력해주세요</div>
-        <input type="text" id="userName" />
-        <button id="nameInputBtn">확인</button>
-      </form>
+      <!-- <form id="nameInput"> -->
+      <div>이름을 입력해주세요</div>
+      <input id="userName" />
+      <button id="nameInputBtn">확인</button>
+      <!-- </form> -->
     </div>
     <!-- 메인 화면 -->
     <div id="main">
@@ -116,12 +116,8 @@
         //맨 처음 들어갈때는 메인페이지가 우선이므로
         //이름을 어떤 방식으로 지어야 할지?
         //함수 뒤에 ()을 쳐 줘야 하는 이유?
+        this.nowPage = "firstScreen";
         this.start();
-        // this.firPage === 1 ? this.showPage(). :
-        // this.mainPage === 1 ? this.showPage(). :
-        // this.workPage === 1 ? this.showPage(). :
-        // this.eatPage === 1 ? this.showPage(). :
-        // this.sleepPage === 1 ? this.showPage(). :
       }
       start() {
         document.getElementById("firstScreen").style.display = "";
@@ -132,6 +128,18 @@
         document.getElementById("workMain").style.display = "none";
         document.getElementById("eatMain").style.display = "none";
         document.getElementById("sleepMain").style.display = "none";
+        this.nowPage = "main";
+
+        //화살표 함수 써줘야함...
+
+        document
+          .getElementById("nameInputBtn")
+          //여기서 일반 함수랑 화살표 함수의 차이를 모르겠음.
+          //function() 형태면 <button id="nameInputBtn">확인</button> 이 this이고,
+          //()=> 형태면 GamePage {nowPage: "main", playerName: null} 이 this임.
+          .addEventListener("click", () => {
+            thisUserName && this.changePage(`${this.nowPage}`);
+          });
         //연결이 되어 있으면 안됨.
       }
       changePage(where) {
@@ -151,19 +159,9 @@
           document.getElementById("backtoMain").style.display = "";
         }
       }
-
-      //   nowState(index) {
-      //     document.getElementById();
-      //     this.firPage = 1;
-      //     this.mainPage = 0;
-      //     this.workPage = 0;
-      //     this.eatPage = 0;
-      //     this.sleepPage = 0;
-      //   }
     }
     new GamePage();
-    document
-      .getElementById("nameInputBtn")
-      .addEventListener("click", .changePage("main"));
+    let thisUserName = document.getElementById("userName").value;
+    console.log(thisUserName);
   </script>
 </html>
