@@ -118,6 +118,7 @@
         //함수 뒤에 ()을 쳐 줘야 하는 이유?
         this.nowPage = "firstScreen";
         this.start();
+        this.userName = null;
       }
       start() {
         document.getElementById("firstScreen").style.display = "";
@@ -138,8 +139,13 @@
           //function() 형태면 <button id="nameInputBtn">확인</button> 이 this이고,
           //()=> 형태면 GamePage {nowPage: "main", playerName: null} 이 this임.
           .addEventListener("click", () => {
-            thisUserName && this.changePage(`${this.nowPage}`);
+            //클릭 시의 value값을 기준으로 함
+            if (document.getElementById("userName").value) {
+              this.changePage(`${this.nowPage}`);
+              this.userName = document.getElementById("userName").value;
+            }
           });
+
         //연결이 되어 있으면 안됨.
       }
       changePage(where) {
@@ -160,8 +166,6 @@
         }
       }
     }
-    new GamePage();
-    let thisUserName = document.getElementById("userName").value;
-    console.log(thisUserName);
+    let startNewGame = new GamePage();
   </script>
 </html>

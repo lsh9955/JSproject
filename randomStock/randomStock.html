@@ -73,10 +73,6 @@
         document.getElementById("stock").textContent = leftStock;
       });
 
-      document
-        .getElementById("sellBtn")
-        .addEventListener("onmouseup", () => {});
-
       document.getElementById("sellBtn").addEventListener("click", () => {
         //남은 주식이 0일 경우 판매가 안됨
         if (leftStock === 0) {
@@ -90,6 +86,7 @@
           alert("승리하셨습니다");
           clearInterval(repeat);
           //주식을 팔면 수량이 1감소하고, 현재가만큼 잔고가 추가됨
+          //남은 금액이 없을때 실패 추가.
         } else {
           leftMoney = leftMoney + totalVal;
           leftStock -= 1;
