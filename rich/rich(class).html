@@ -195,8 +195,8 @@
         this.nowMoney = 100;
         this.nowLevel = 1;
         this.levelCost = this.nowLevel * 10;
-        this.maxHp = this.nowHp * this.nowLevel;
-        this.maxMp = this.nowMp * this.nowLevel;
+        this.maxHp = 100 * this.nowLevel;
+        this.maxMp = 100 * this.nowLevel;
 
         this.notAllowed;
         //()을 쓸 때와 아닐때가 구분이 잘 안감 . return값을 내냐 아니냐로 알고 있는데?
@@ -228,8 +228,8 @@
             this.nowMoney = this.nowMoney - this.levelCost;
             this.nowLevel = this.nowLevel + 1;
             this.levelCost = this.nowLevel * 10;
-            this.maxHp = this.nowHp * this.nowLevel;
-            this.maxMp = this.nowMp * this.nowLevel;
+            this.maxHp = 100 * this.nowLevel;
+            this.maxMp = 100 * this.nowLevel;
           } else {
             this.notAllowed("레벨업에 필요한 금액이 부족합니다");
           }
