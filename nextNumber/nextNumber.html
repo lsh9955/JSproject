@@ -31,29 +31,29 @@
     let clickable = false;
 
     /*
-   let shuffleNum = [];
+    let shuffleNum = [];
 
-      while (shuffleNum.length !== 16) {
-        let randomNum = Math.floor(Math.random() * 16) + 1;
-        if (!shuffleNum.includes(randomNum)) {
-          shuffleNum.push(randomNum);
-        }
-      }
-      for (let i = 0; i < 16; i++) {
-        document.getElementbyId(`${i}`).textcontent = shuffleNum.shift()
-
-      } 
+       while (shuffleNum.length !== 16) {
+         let randomNum = Math.floor(Math.random() * 16) + 1;
+         if (!shuffleNum.includes(randomNum)) {
+           shuffleNum.push(randomNum);
+         }
+       }
        for (let i = 0; i < 16; i++) {
-      fadeIn(document.getElementById(`${i}`));
-      setTimeout(() => {
-        fadeOut(document.getElementById(`${i}`));
-      }, 3000);
-    }
+         document.getElementbyId(`${i}`).textcontent = shuffleNum.shift()
+
+       }
+        for (let i = 0; i < 16; i++) {
+       fadeIn(document.getElementById(`${i}`));
+       setTimeout(() => {
+         fadeOut(document.getElementById(`${i}`));
+       }, 3000);
+     }
 
 
 
 
-    */
+     */
     function createCard() {
       let shuffleNum = [];
 
@@ -115,6 +115,7 @@
     let countAns = [];
 
     createCard();
+
     setTimeout(() => {
       clickable = true;
     }, 5000);
@@ -126,92 +127,74 @@
         fadeOut(document.getElementById(`${i}`));
       }, 3000);
     }
+    document.body.addEventListener("click", (e) => clickEvent(e));
 
-    function reNew() {
-      shuffleNum = [];
+    function clickEvent(e) {
+      if (
+        countAns.length === 15 &&
+        !countAns.includes(e.target.textContent) &&
+        clickable === true
+      ) {
+        //연타하면 16번이 계속 눌리는 버그가 있었음
+        //이렇게 고치니 없어지긴 했는데 이유를 모르겠음.
+        fadeIn(e.target);
+        clickable = false;
 
-      while (shuffleNum.length !== 16) {
-        let randomNum = Math.floor(Math.random() * 16) + 1;
-        if (!shuffleNum.includes(randomNum)) {
-          shuffleNum.push(randomNum);
-        }
-      }
-      console.log(shuffleNum);
-      for (let i = 0; i < 16; i++) {
-        document.getElementById(`${i}`).textcontent = shuffleNum.shift();
-        console.log(document.getElementById(`${i}`).textcontent);
-      }
+        e.target.style.color = "black";
+        e.target.style.backgroundColor = "skyBlue";
 
-      for (let i = 0; i < 16; i++) {
-        fadeIn(document.getElementById(`${i}`));
         setTimeout(() => {
-          fadeOut(document.getElementById(`${i}`));
-        }, 3000);
-      }
-      countAns = [];
-    }
-    document.body.addEventListener("click", (e) => {
-      reNew();
-      //처음 시작할때도 0이상이므로 시작할때 버튼을 누를수 없음.
-      //우연히 맞아서 쓴것이지만, 정확한 코드는 아님.
-      //   e.target.style.opacity > 0
-      //     ? ""
-      //%가 아니므로 100%는 1임.
-      //textcontent !==""을 쓰는 이유? = 표 외부의 body가 선택되는 경우가 있기 때문에.
-      clickable === true &&
-      e.target.textContent !== "" &&
-      !countAns.includes(e.target.textContent)
-        ? (((e.target.style.color = "black"),
-          (e.target.style.backgroundColor = "skyBlue"),
-          fadeIn(e.target)),
-          //clickable을 맨 밑에 써버리면 답으로 풀었던 칸을 눌렀을 때 false로 처리되어 다른 버튼을
-          //누를 수가 없음.
-          (clickable = false),
+          alert("다 맞췄습니다!");
+          document.body.innerHTML = "";
+          countAns = [];
+
+          createCard();
+
+          setTimeout(() => {
+            clickable = true;
+          }, 5000);
+
+          for (let i = 0; i < 16; i++) {
+            fadeIn(document.getElementById(`${i}`));
+
+            setTimeout(() => {
+              fadeOut(document.getElementById(`${i}`));
+            }, 3000);
+          }
+        }, 1000);
+      } else if (
+        clickable === true &&
+        e.target.textContent !== "" &&
+        e.target !== document.body &&
+        //span을 클릭하면 안에 있는 td가 보이지 않으므로 클릭 자체가 되지 않도록 해야한다.
+        e.target.tagName !== "SPAN" &&
+        e.target.tagName !== "DIV" &&
+        !countAns.includes(e.target.textContent)
+      ) {
+        e.target.style.color = "black";
+        e.target.style.backgroundColor = "skyBlue";
+
+        fadeIn(e.target);
+        clickable = false;
+        if (
           e.target.textContent === "1" ||
           (countAns.length >= 1 &&
             Number(countAns[countAns.length - 1]) ===
               Number(e.target.textContent) - 1)
-            ? countAns.push(e.target.textContent) &&
-              setTimeout(() => {
-                clickable = true;
-              }, 1000)
-            : setTimeout(() => {
-                fadeOut(e.target);
-              }, 1000) &&
-              setTimeout(() => {
-                clickable = true;
-              }, 2000),
-          countAns.length === 16
-            ? reNew &&
-              // setTimeout(() => {
-              //     shuffleNum = [];
-
-              //     while (shuffleNum.length !== 16) {
-              //       let randomNum = Math.floor(Math.random() * 16) + 1;
-              //       if (!shuffleNum.includes(randomNum)) {
-              //         shuffleNum.push(randomNum);
-              //       }
-              //     }
-              //     console.log(shuffleNum);
-              //     for (let i = 0; i < 16; i++) {
-              //       document.getElementById(`${i}`).textcontent =
-              //         shuffleNum.shift();
-              //     }
-
-              //     for (let i = 0; i < 16; i++) {
-              //       fadeIn(document.getElementById(`${i}`));
-              //       setTimeout(() => {
-              //         fadeOut(document.getElementById(`${i}`));
-              //       }, 3000);
-              //     }
-              //     countAns = [];
-              //   }, 1000)
-
-              setTimeout(() => {
-                alert("다 맞췄습니다!");
-              }, 1000)
-            : "")
-        : "";
-    });
+        ) {
+          countAns.push(e.target.textContent) &&
+            setTimeout(() => {
+              clickable = true;
+            }, 1000);
+        } else {
+          setTimeout(() => {
+            fadeOut(e.target);
+          }, 1000) &&
+            setTimeout(() => {
+              clickable = true;
+            }, 2000);
+        }
+      }
+    }
   </script>
 </html>
