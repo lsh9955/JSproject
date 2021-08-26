@@ -1,5 +1,11 @@
 this is game that player submit word that first character is same as the last character of the word that latest submitted
 
+## Link
+
+https://lsh9955.github.io/JSproject/wordChain/wordChain.html
+
+---
+
 more info: https://velog.io/@snowman/series/JSMiniProject
 
 ![fast142712](https://user-images.githubusercontent.com/72291472/126594022-b7eed04d-6f31-4d9d-a354-25fb04ec0145.gif)

@@ -1,5 +1,11 @@
 make calculator that can use in tenkeyless keyboard
 
+## Link
+
+https://lsh9955.github.io/JSproject/tenkeylessCal/tenkeylessCal.html
+
+---
+
 more info:
 https://velog.io/@snowman/series/JSMiniProject
 
