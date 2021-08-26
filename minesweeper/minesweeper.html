@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>minesweeper</title>
+    <style>
+      tr {
+        border-collapse: collapse;
+      }
+      td {
+        width: 20px;
+        height: 20px;
+        background-color: darkgrey;
+        border: 1px solid black;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
+    function createBoard() {
+      //지뢰판 생성
+
+      for (let i = 1; i <= 8; i++) {
+        let column = document.createElement("tr");
+
+        for (let k = 1; k <= 8; k++) {
+          let row = document.createElement("td");
+          row.id = `${i}${k}`;
+          column.appendChild(row);
+        }
+        document.body.appendChild(column);
+      }
+    }
+    function createMine() {
+      //지뢰 랜덤배정
+      let mineArr = [];
+      while (mineArr.length !== 10) {
+        let mineIndex = Math.floor(Math.random() * 64 + 1);
+        mineArr.includes(
+          String(
+            (Math.floor(mineIndex / 8) === 0 ? 1 : Math.floor(mineIndex / 8)) *
+              10 +
+              (mineIndex % 8) +
+              1
+          )
+        )
+          ? ""
+          : mineArr.push(
+              String(
+                (Math.floor(mineIndex / 8) === 0
+                  ? 1
+                  : Math.floor(mineIndex / 8)) *
+                  10 +
+                  (mineIndex % 8) +
+                  1
+              )
+            );
+      }
+      return mineArr;
+    }
+    createBoard();
+    let mines = createMine();
+    console.log(mines);
+    //빈 공간 찾기
+    let searchIndex = [];
+    //사용자가 표기한 곳
+    let userFind = [];
+    //다 찾아내어버림. 뭐가 문제일까?
+    //주위 최대 5개까지만 보이도록 함. 클릭 횟수를 기준으로 함.
+
+    function findSafe(clickIndex, count) {
+      console.log(count);
+      //아무리 많이 나가도 9개 이상 못나가도록(클릭한 갯수 포함해야하므로)
+      if (count > 0) {
+      } else {
+        document.getElementById(clickIndex).style.color = "black";
+        document.getElementById(clickIndex).style.backgroundColor = "white";
+        //8개의 경우의 수가 있음. 찾은 공간은 다시 찾지 않도록 함.
+        let x = [-1, -1, -1, 0, 0, 1, 1, 1];
+        let y = [-1, 0, 1, -1, 1, -1, 0, 1];
+        for (let i = 0; i < 8; i++) {
+          let nowIndex =
+            String(Number(clickIndex[0]) + y[i]) +
+            String(Number(clickIndex[1]) + x[i]);
+
+          if (
+            Number(nowIndex[0]) < 1 ||
+            Number(nowIndex[0]) > 8 ||
+            Number(nowIndex[1]) < 1 ||
+            Number(nowIndex[1]) > 8
+          ) {
+            continue;
+          }
+          if (!mines.includes(nowIndex) && !searchIndex.includes(nowIndex)) {
+            document.getElementById(nowIndex).style.backgroundColor = "white";
+            document.getElementById(nowIndex).textContent
+              ? (document.getElementById(nowIndex).style.color = "black")
+              : "";
+            searchIndex.push(nowIndex);
+
+            findSafe(nowIndex, count + 1);
+          }
+        }
+      }
+    }
+    //주변에 있는 폭탄 개수 나타내기
+    function bombCount() {
+      for (let j = 1; j <= 8; j++) {
+        for (let k = 1; k <= 8; k++) {
+          let x = [-1, -1, -1, 0, 0, 1, 1, 1];
+          let y = [-1, 0, 1, -1, 1, -1, 0, 1];
+          let bombs = 0;
+          for (let i = 0; i < 8; i++) {
+            let nowIndex = String(j + y[i]) + String(k + x[i]);
+
+            if (
+              Number(nowIndex[0]) < 1 ||
+              Number(nowIndex[0]) > 8 ||
+              Number(nowIndex[1]) < 1 ||
+              Number(nowIndex[1]) > 8
+            ) {
+              continue;
+            }
+            if (mines.includes(nowIndex)) {
+              bombs += 1;
+            }
+          }
+          if (bombs > 0 && !mines.includes(`${j}${k}`)) {
+            document.getElementById(`${j}${k}`).textContent = bombs;
+            document.getElementById(`${j}${k}`).style.color = "darkgrey";
+          }
+        }
+      }
+    }
+
+    //queryselector에서 td만 고를 수 없어서 if문으로 걸러줘야함
+    document.querySelector("body").addEventListener("click", (e) => {
+      if (isNaN(Number(e.target.id))) {
+        ("");
+      } else {
+        //처음 누른 경우
+        //여기서 0을 안거치는 이유? target id=retry가 들어가버림
+        //버튼을 눌러서 함수에서의 e.target이 됨.
+        //이 함수 말고 queryselector에서 if문으로 걸러줌.
+        if (searchIndex.length === 0) {
+          searchIndex.push(e.target.id);
+
+          document.getElementById(e.target.id).style.backgroundColor = "white";
+
+          if (mines.includes(e.target.id)) {
+            while (mines.includes(e.target.id)) {
+              mines = createMine();
+            }
+          }
+          bombCount();
+          document.getElementById(e.target.id).style.color = "black";
+          findSafe(e.target.id, 0);
+        }
+        //터지면 초기화
+        else if (mines.includes(e.target.id)) {
+          document.getElementById(e.target.id).style.backgroundColor = "white";
+          document.getElementById(e.target.id).textContent = "펑";
+          alert("펑");
+          //다시 시작하는 버튼
+          let retryButton = document.createElement("button");
+          retryButton.id = "retry";
+          retryButton.textContent = "다시 시작?";
+          //여기 eventlinster를 왜 밑에서 getelementbyId로 하면 안되는지?
+          retryButton.addEventListener("click", (e) => {
+            document.body.innerHTML = "";
+            createBoard();
+            mines = createMine();
+            //클릭시에 retry가 들어가버림
+            searchIndex = [];
+            console.log(mines);
+            console.log(searchIndex);
+          });
+          document.body.appendChild(retryButton);
+        } else {
+          findSafe(e.target.id, 0);
+        }
+      }
+    });
+
+    document.querySelector("body").addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      if (!isNaN(Number(e.target.id)) && e.button === 2) {
+        if (document.getElementById(e.target.id).textContent === "!") {
+          document.getElementById(e.target.id).textContent = "?";
+          document.getElementById(e.target.id).style.color = "blue";
+          for (let i = 0; i < userFind.length; i++) {
+            if (userFind[i]) {
+              userFind.splice(i, 1);
+            }
+          }
+        } else if (document.getElementById(e.target.id).textContent === "?") {
+          document.getElementById(e.target.id).textContent = "";
+        } else {
+          document.getElementById(e.target.id).textContent = "!";
+          document.getElementById(e.target.id).style.color = "blue";
+          userFind.push(e.target.id);
+          if (userFind.length === 10) {
+            for (let i = 0; i < 10; i++) {
+              if (i === 9 && mines.includes(userFind[9])) {
+                alert("승리하셨습니다!");
+                let retryButton = document.createElement("button");
+                retryButton.id = "retry";
+                retryButton.textContent = "다시 시작?";
+                //여기 eventlinster를 왜 밑에서 getelementbyId로 하면 안되는지?
+                retryButton.addEventListener("click", (e) => {
+                  document.body.innerHTML = "";
+                  createBoard();
+                  mines = createMine();
+                  //클릭시에 retry가 들어가버림
+                  searchIndex = [];
+                  console.log(mines);
+                  console.log(searchIndex);
+                });
+                document.body.appendChild(retryButton);
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+</html>
