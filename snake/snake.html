@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>snake</title>
+    <style>
+      #table {
+        border-collapse: collapse;
+        user-select: none;
+      }
+      td {
+        width: 10px;
+        height: 10px;
+
+        border: 1px solid black;
+        padding: 0px;
+      }
+      .snakeHead {
+        /* 상위 부분을 flex로 하니 됨. */
+        border: 0px;
+        display: flex;
+        background-color: green;
+        z-index: 1;
+      }
+
+      #snakeEye1up,
+      #snakeEye2up,
+      #snakeEye1left,
+      #snakeEye2left,
+      #snakeEye1right,
+      #snakeEye2right,
+      #snakeEye1down,
+      #snakeEye2down {
+        display: inline-block;
+        position: relative;
+        width: 2px;
+        height: 2px;
+        border-radius: 10px;
+        background-color: black;
+      }
+      #snakeEye1up {
+        top: 2px;
+        left: 2px;
+      }
+      #snakeEye2up {
+        top: 2px;
+        left: 4px;
+      }
+      #snakeEye1left {
+        top: 2px;
+        left: 2px;
+      }
+      #snakeEye2left {
+        top: 6px;
+        left: 0px;
+      }
+      #snakeEye1right {
+        top: 2px;
+        left: 6px;
+      }
+      #snakeEye2right {
+        top: 6px;
+        left: 4px;
+      }
+      #snakeEye1down {
+        top: 6px;
+        left: 2px;
+      }
+      #snakeEye2down {
+        top: 6px;
+        left: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="table"></table>
+    <div id="score"></div>
+    <script>
+      function startGame() {
+        const makeBoard = document.createDocumentFragment();
+        Array(16)
+          .fill()
+          .map((v, i) => i)
+          .forEach((e, i) => {
+            const $tr = document.createElement("tr");
+
+            const yIndex = i;
+
+            Array(16)
+              .fill()
+              .map((v, i) => 0)
+              .forEach((v, i) => {
+                const $td = document.createElement("td");
+                $td.id = `${yIndex * 16 + i}`;
+
+                $tr.appendChild($td);
+              });
+
+            makeBoard.appendChild($tr);
+            document.getElementById("table").appendChild(makeBoard);
+          });
+      }
+
+      function snakeTail() {
+        //생성이 되고 3초 뒤에 시작하게 하면 좋을 거 같음.
+        const randomIndex = Math.floor(Math.random() * 256 + 1);
+        board.push(randomIndex);
+        document.getElementById(randomIndex).className = "snakeHead";
+        const snakeEye1 = document.createElement("span");
+        const snakeEye2 = document.createElement("span");
+        snakeEye1.id = "snakeEye1up";
+        snakeEye2.id = "snakeEye2up";
+        document.getElementById(randomIndex).appendChild(snakeEye1);
+        document.getElementById(randomIndex).appendChild(snakeEye2);
+      }
+      let gameStop;
+      let restart = false;
+      function move() {
+        gameStop = setInterval(() => {
+          //방향에 따라 케이스를 다 나눠서 생각해야할듯
+          let nowHeadIndex = document.getElementsByClassName("snakeHead")[0].id;
+
+          document.getElementById(nowHeadIndex).classList.remove("snakeHead");
+          document
+            .getElementById(nowHeadIndex)
+            .removeChild(document.getElementById(nowHeadIndex).childNodes[0]);
+          document
+            .getElementById(nowHeadIndex)
+            .removeChild(document.getElementById(nowHeadIndex).childNodes[0]);
+          let eyes;
+          if (keyDir === undefined || keyDir === "ArrowUp") {
+            nowHeadIndex =
+              Number(nowHeadIndex) - 16 < 0
+                ? Number(nowHeadIndex) + 240
+                : Number(nowHeadIndex) - 16;
+            eyes = "up";
+          } else if (keyDir === "ArrowLeft") {
+            nowHeadIndex =
+              Number(nowHeadIndex) - 1 < 0
+                ? Number(nowHeadIndex) + 15
+                : Number(nowHeadIndex) - 1;
+            eyes = "left";
+          } else if (keyDir === "ArrowRight") {
+            nowHeadIndex =
+              Number(nowHeadIndex) % 16 === 15
+                ? Number(nowHeadIndex) - 15
+                : Number(nowHeadIndex) + 1;
+            eyes = "right";
+          } else if (keyDir === "ArrowDown") {
+            nowHeadIndex =
+              Number(nowHeadIndex) >= 240 && Number(nowHeadIndex) <= 255
+                ? Number(nowHeadIndex) - 240
+                : Number(nowHeadIndex) + 16;
+            eyes = "down";
+          }
+
+          if (board.includes(Number(nowHeadIndex))) {
+            clearInterval(gameStop);
+            restart = true;
+
+            for (let j = 0; j < board.length; j++) {
+              document.getElementById(board[j]).style.backgroundColor = "";
+            }
+            document.getElementById(item).style.backgroundColor = "";
+            alert(`패배하였습니다! 최고 스코어 ${board.length}`);
+            board = [];
+            item = "";
+            snakeTail();
+            move();
+            randomCell();
+          } else if (board.includes(item)) {
+            board.unshift(Number(nowHeadIndex));
+            // document.getElementById(item).style.backgroundColor = "";
+            randomCell();
+          } else {
+            document.getElementById(board.pop()).style.backgroundColor = "";
+            board.unshift(Number(nowHeadIndex));
+          }
+          if (!restart) {
+            for (let j = 0; j < board.length; j++) {
+              document.getElementById(nowHeadIndex).style.backgroundColor =
+                "green";
+            }
+            document.getElementById(nowHeadIndex).className = "snakeHead";
+            const snakeEye1 = document.createElement("span");
+            const snakeEye2 = document.createElement("span");
+            snakeEye1.id = `snakeEye1${eyes}`;
+            snakeEye2.id = `snakeEye2${eyes}`;
+            document.getElementById(nowHeadIndex).appendChild(snakeEye1);
+            document.getElementById(nowHeadIndex).appendChild(snakeEye2);
+          } else {
+            //restart 값을 다시 false로 바꿔서 초기화시킴. 위에서 머리가 다시 생성되어
+            //초기화해도 남아있던 것이었음.
+            restart = false;
+          }
+        }, 100);
+      }
+      let keyDir;
+      let keyArr = ["ArrowUp", "ArrowLeft", "ArrowRight", "ArrowDown"];
+      window.addEventListener("keydown", (e) =>
+        keyArr.includes(e.key) ? (keyDir = e.key) : ""
+      );
+      let board = [];
+      let item;
+      startGame();
+
+      snakeTail();
+      move();
+
+      randomCell();
+      function randomCell() {
+        //꼬리가 지나고 있는 부분에서는 생성되면 안됨.
+        let randomIndex = Math.floor(Math.random() * 256 + 1);
+        if (board.includes(randomIndex)) {
+          while (board.includes(randomIndex)) {
+            randomIndex = Math.floor(Math.random() * 256 + 1);
+          }
+        }
+        item = randomIndex;
+        document.getElementById(randomIndex).style.backgroundColor = "skyblue";
+        document.getElementById(randomIndex).style.zIndex = -10;
+      }
+    </script>
+  </body>
+</html>
