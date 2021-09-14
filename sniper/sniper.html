@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sniper</title>
+    <style>
+      .background {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat 0 0;
+        width: 608px;
+        height: 208px;
+        z-index: 10;
+      }
+      .enemy1 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -650px -129px;
+        width: 87px;
+        height: 88px;
+        position: absolute;
+        top: 40px;
+        left: 220px;
+        z-index: -1;
+      }
+
+      .enemyShot1 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -750px -98px;
+        width: 87px;
+        height: 119px;
+        position: absolute;
+        top: 9px;
+        left: 220px;
+        z-index: -1;
+      }
+      .enemy2 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -650px -129px;
+        width: 87px;
+        height: 88px;
+        position: absolute;
+        top: 40px;
+        left: 500px;
+        z-index: -1;
+      }
+
+      .enemyShot2 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -750px -98px;
+        width: 87px;
+        height: 119px;
+        position: absolute;
+        top: 9px;
+        left: 500px;
+        z-index: -1;
+      }
+      /* 31px 차이 남 */
+      .enemy3 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -650px -129px;
+        width: 87px;
+        height: 88px;
+        position: absolute;
+        top: 110px;
+        left: 420px;
+        z-index: -1;
+      }
+
+      .enemyShot3 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -750px -98px;
+        width: 87px;
+        height: 119px;
+        position: absolute;
+        top: 79px;
+        left: 420px;
+        z-index: -1;
+      }
+      .people1 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -850px -149px;
+        width: 87px;
+        height: 69px;
+        position: absolute;
+        left: 240px;
+        top: 60px;
+      }
+      .people2 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -850px -149px;
+        width: 87px;
+        height: 69px;
+        position: absolute;
+        left: 520px;
+        top: 40px;
+      }
+      .people3 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -850px -149px;
+        width: 87px;
+        height: 69px;
+        position: absolute;
+        left: 440px;
+        top: 120px;
+      }
+      .userShot1 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -950px -129px;
+        width: 87px;
+        height: 89px;
+        position: absolute;
+        left: 240px;
+        top: 40px;
+      }
+      .userShot2 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -950px -129px;
+        width: 87px;
+        height: 89px;
+        position: absolute;
+        left: 520px;
+        top: 40px;
+      }
+      .userShot3 {
+        display: inline-block;
+        background: url("./battle.svg") no-repeat -950px -129px;
+        width: 87px;
+        height: 89px;
+        position: absolute;
+        left: 440px;
+        top: 120px;
+      }
+      .focus {
+        /* display: inline-block; */
+        position: absolute;
+        background: url("./battle.svg") no-repeat -1050px -110px;
+        width: 108px;
+        height: 107px;
+        top: 0px;
+        left: 0px;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <span class="background">
+      <span class="enemy1"></span>
+      <span class="enemyShot1"></span>
+      <span class="enemy2"></span>
+      <span class="enemyShot2"></span>
+      <span class="enemy3"></span>
+      <span class="enemyShot3"></span>
+      <span class="people1"></span>
+      <span class="people2"></span>
+      <span class="people3"></span>
+      <span class="userShot1"></span>
+      <span class="userShot2"></span>
+      <span class="userShot3"></span>
+      <span class="focus"></span>
+    </span>
+    <script>
+      const mouseFocus = document.querySelector(".focus");
+      const $userShot = document.querySelector(".userShot");
+      const $enemy1 = document.querySelector(".enemy1");
+      const $enemy2 = document.querySelector(".enemy2");
+      const $enemy3 = document.querySelector(".enemy3");
+      const $enemyShot1 = document.querySelector(".enemyShot1");
+      const $enemyShot2 = document.querySelector(".enemyShot2");
+      const $enemyShot3 = document.querySelector(".enemyShot3");
+      const $people1 = document.querySelector(".people1");
+      const $people2 = document.querySelector(".people2");
+      const $people3 = document.querySelector(".people3");
+      const $userShot1 = document.querySelector(".userShot1");
+      const $userShot2 = document.querySelector(".userShot2");
+      const $userShot3 = document.querySelector(".userShot3");
+      let eventBox = ["enemy", "enemyShot", "people", "userShot"];
+      //초기화
+      for (let i = 0; i < 4; i++) {
+        for (let k = 0; k < 3; k++) {
+          document.querySelector(`.${eventBox[i]}${k + 1}`).style.display = "none";
+        }
+      }
+      document.addEventListener("mousemove", (e) => {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        mouseFocus.style.left = mouseX + "px";
+        mouseFocus.style.top = mouseY + "px";
+      });
+      let showEnemy = [0, 0, 0];
+      function enemyIncoming() {
+        //나타나는 적을 몇명으로 할 것인지?
+        let randomAmout = Math.floor(Math.random() * 3 + 1);
+        for (let i = 0; i < randomAmout; i++) {}
+
+        console.log(randomAmout);
+      }
+      enemyIncoming();
+    </script>
+  </body>
+</html>
