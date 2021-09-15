@@ -6,7 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>sniper</title>
     <style>
+      html {
+        /* 픽셀을 옮겨서 사진 중심을 포인터 중심으로 잡을 수 있음 */
+        cursor: url("./target.svg") 12 12, auto;
+      }
+      body {
+        /* 포인터를 none으로 설정해 놓고 배경 사진으로 설정함. */
+        /* body설정이 없이 background만 css를 지정하면 안됨 */
+        pointer-events: none;
+        /* background: url("./battle.svg") no-repeat; */
+      }
       .background {
+        pointer-events: none;
         display: inline-block;
         background: url("./battle.svg") no-repeat 0 0;
         width: 608px;
@@ -14,6 +25,7 @@
         z-index: 10;
       }
       .enemy1 {
+        pointer-events: auto;
         display: inline-block;
         background: url("./battle.svg") no-repeat -650px -129px;
         width: 87px;
@@ -25,6 +37,7 @@
       }
 
       .enemyShot1 {
+        pointer-events: none;
         display: inline-block;
         background: url("./battle.svg") no-repeat -750px -98px;
         width: 87px;
@@ -35,6 +48,7 @@
         z-index: -1;
       }
       .enemy2 {
+        pointer-events: auto;
         display: inline-block;
         background: url("./battle.svg") no-repeat -650px -129px;
         width: 87px;
@@ -57,6 +71,7 @@
       }
       /* 31px 차이 남 */
       .enemy3 {
+        pointer-events: auto;
         display: inline-block;
         background: url("./battle.svg") no-repeat -650px -129px;
         width: 87px;
@@ -64,7 +79,7 @@
         position: absolute;
         top: 110px;
         left: 420px;
-        z-index: -1;
+        z-index: -2;
       }
 
       .enemyShot3 {
@@ -141,12 +156,47 @@
         left: 0px;
         transform: translate(-50%, -50%);
       }
+
+      @keyframes income1 {
+        0% {
+          opacity: 0;
+          left: 0px;
+        }
+        50% {
+          opacity: 1;
+          left: 220px;
+        }
+      }
+      @keyframes income2 {
+        0% {
+          opacity: 0;
+          top: 120px;
+        }
+        50% {
+          opacity: 1;
+          top: 40px;
+        }
+      }
+      @keyframes income3 {
+        0% {
+          opacity: 0;
+          left: 540px;
+        }
+        50% {
+          opacity: 1;
+          left: 420px;
+        }
+      }
+      #lifeCount {
+        position: relative;
+        top: 200px;
+      }
     </style>
   </head>
   <body>
     <span class="background">
       <span class="enemy1"></span>
-      <span class="enemyShot1"></span>
+      <span class="enemyShot1"> </span>
       <span class="enemy2"></span>
       <span class="enemyShot2"></span>
       <span class="enemy3"></span>
@@ -157,8 +207,9 @@
       <span class="userShot1"></span>
       <span class="userShot2"></span>
       <span class="userShot3"></span>
-      <span class="focus"></span>
     </span>
+
+    <div id="lifeCount">목숨 : <span id="life"></span></div>
     <script>
       const mouseFocus = document.querySelector(".focus");
       const $userShot = document.querySelector(".userShot");
@@ -174,27 +225,146 @@
       const $userShot1 = document.querySelector(".userShot1");
       const $userShot2 = document.querySelector(".userShot2");
       const $userShot3 = document.querySelector(".userShot3");
+      const $life = document.querySelector("#life");
       let eventBox = ["enemy", "enemyShot", "people", "userShot"];
       //초기화
+      $life.textContent = 10;
+
       for (let i = 0; i < 4; i++) {
         for (let k = 0; k < 3; k++) {
           document.querySelector(`.${eventBox[i]}${k + 1}`).style.display = "none";
         }
       }
-      document.addEventListener("mousemove", (e) => {
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        mouseFocus.style.left = mouseX + "px";
-        mouseFocus.style.top = mouseY + "px";
-      });
+      let eTarget = ["enemy", "enemyShot"];
+      for (let i = 0; i < 2; i++) {
+        for (let k = 0; k < 3; k++) {
+          document.querySelector(`.${eTarget[i]}${k + 1}`).addEventListener("click", (e) => {
+            kill(e.target.className);
+            console.log(e.target.className);
+          });
+        }
+      }
+
+      function kill(ele) {
+        if (ele === "enemy1") {
+          $userShot1.style.display = "";
+          $enemy1.style.display = "none";
+          $enemyShot1.style.display = "none";
+          showEnemy[0] = 0;
+          setTimeout(() => {
+            $userShot1.style.display = "none";
+          }, 600);
+        } else if (ele === "enemy2") {
+          $userShot2.style.display = "";
+          $enemy2.style.display = "none";
+          $enemyShot2.style.display = "none";
+          showEnemy[1] = 0;
+          setTimeout(() => {
+            $userShot2.style.display = "none";
+          }, 600);
+        } else if (ele === "enemy3") {
+          $userShot3.style.display = "";
+          $enemy3.style.display = "none";
+          $enemyShot3.style.display = "none";
+          showEnemy[2] = 0;
+          setTimeout(() => {
+            $userShot3.style.display = "none";
+          }, 600);
+        }
+      }
+
+      //   document.body.addEventListener("click", (e) => {
+      //     console.log(e.target);
+      //   });
+      //   document.body.style.cursor = mouseFocus;
+      //   document.body.addEventListener("mousemove", (e) => {
+      //     console.log(e.target);
+      //     const mouseX = e.clientX;
+      //     const mouseY = e.clientY;
+      //     mouseFocus.style.left = mouseX + "px";
+      //     mouseFocus.style.top = mouseY + "px";
+      //   });
       let showEnemy = [0, 0, 0];
+
       function enemyIncoming() {
         //나타나는 적을 몇명으로 할 것인지?
-        let randomAmout = Math.floor(Math.random() * 3 + 1);
-        for (let i = 0; i < randomAmout; i++) {}
 
-        console.log(randomAmout);
+        setInterval(() => {
+          let enemyCount = 0;
+          for (let i = 0; i < 3; i++) {
+            if (showEnemy[i] === 1) {
+              enemyCount++;
+            }
+          }
+          let randomAmout = Math.floor(Math.random() * 3 + 1);
+
+          if (enemyCount >= randomAmout) {
+          } else {
+            let nowCount = randomAmout - enemyCount;
+            while (nowCount !== 0) {
+              let willPut = Math.floor(Math.random() * 3);
+              if (showEnemy[willPut] === 0) {
+                showEnemy[willPut] = 1;
+                nowCount--;
+              }
+            }
+          }
+
+          for (let i = 0; i < 3; i++) {
+            if (showEnemy[0] === 1 && $enemy1.style.display === "none") {
+              $enemy1.style.display = "";
+              $enemy1.style.animation = "income1 1s linear ";
+              //   $enemy1.addEventListener("click", function (e) {
+              //     console.log(`${e.target} killed`);
+              //   });
+              comAttack(1);
+            } else if (showEnemy[1] === 1 && $enemy2.style.display === "none") {
+              $enemy2.style.display = "";
+              $enemy2.style.animation = "income2 1s linear ";
+              comAttack(2);
+            } else if (showEnemy[2] === 1 && $enemy3.style.display === "none") {
+              $enemy3.style.display = "";
+              $enemy3.style.animation = "income3 1s linear ";
+              comAttack(3);
+            }
+          }
+          //시간을 랜덤으로 설정하는 방법 알아보기
+        }, 2);
       }
+      function comAttack(a) {
+        setTimeout(() => {
+          if (a === 1 && $enemy1.style.display === "" && showEnemy[0] === 1) {
+            $enemyShot1.style.display = "";
+            $life.textContent--;
+          }
+          if (a === 2 && $enemy2.style.display === "" && showEnemy[1] === 1) {
+            $enemyShot2.style.display = "";
+            $life.textContent--;
+          }
+          if (a === 3 && $enemy3.style.display === "" && showEnemy[2] === 1) {
+            $enemyShot3.style.display = "";
+            $life.textContent--;
+          }
+        }, 2000);
+        setTimeout(() => {
+          if ($enemyShot1.style.display === "" && showEnemy[0] === 1 && $enemy1.style.display === "") {
+            $enemyShot1.style.display = "none";
+            $enemy1.style.display = "none";
+            showEnemy[0] = 0;
+          }
+          if ($enemyShot2.style.display === "" && showEnemy[1] === 1 && $enemy2.style.display === "") {
+            $enemyShot2.style.display = "none";
+            $enemy2.style.display = "none";
+            showEnemy[1] = 0;
+          }
+          if ($enemyShot3.style.display === "" && showEnemy[2] === 1 && $enemy3.style.display === "") {
+            $enemyShot3.style.display = "none";
+            $enemy3.style.display = "none";
+            showEnemy[2] = 0;
+          }
+        }, 4000);
+      }
+
       enemyIncoming();
     </script>
   </body>
