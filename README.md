@@ -73,3 +73,9 @@ https://lsh9955.github.io/JSproject/wordChain/wordChain.html
 https://lsh9955.github.io/JSproject/snake/snake.html
 
 ---
+
+## sniper
+
+https://lsh9955.github.io/JSproject/sniper/sniper.html
+
+---
