@@ -189,7 +189,7 @@
       }
       #lifeCount {
         position: relative;
-        top: 200px;
+        top: 10px;
       }
     </style>
   </head>
@@ -219,16 +219,14 @@
       const $enemyShot1 = document.querySelector(".enemyShot1");
       const $enemyShot2 = document.querySelector(".enemyShot2");
       const $enemyShot3 = document.querySelector(".enemyShot3");
-      const $people1 = document.querySelector(".people1");
-      const $people2 = document.querySelector(".people2");
-      const $people3 = document.querySelector(".people3");
+
       const $userShot1 = document.querySelector(".userShot1");
       const $userShot2 = document.querySelector(".userShot2");
       const $userShot3 = document.querySelector(".userShot3");
       const $life = document.querySelector("#life");
       let eventBox = ["enemy", "enemyShot", "people", "userShot"];
       //초기화
-      $life.textContent = 10;
+      $life.textContent = 5;
 
       for (let i = 0; i < 4; i++) {
         for (let k = 0; k < 3; k++) {
@@ -290,60 +288,73 @@
         //나타나는 적을 몇명으로 할 것인지?
 
         setInterval(() => {
-          let enemyCount = 0;
-          for (let i = 0; i < 3; i++) {
-            if (showEnemy[i] === 1) {
-              enemyCount++;
-            }
-          }
-          let randomAmout = Math.floor(Math.random() * 3 + 1);
-
-          if (enemyCount >= randomAmout) {
-          } else {
-            let nowCount = randomAmout - enemyCount;
-            while (nowCount !== 0) {
-              let willPut = Math.floor(Math.random() * 3);
-              if (showEnemy[willPut] === 0) {
-                showEnemy[willPut] = 1;
-                nowCount--;
+          //interval 안에 timeout을 줘서 캐릭터가 계속 나오는 오류를 막음
+          setTimeout(() => {
+            let enemyCount = 0;
+            for (let i = 0; i < 3; i++) {
+              if (showEnemy[i] === 1) {
+                enemyCount++;
               }
             }
-          }
+            let randomAmout = Math.floor(Math.random() * 3 + 1);
 
-          for (let i = 0; i < 3; i++) {
-            if (showEnemy[0] === 1 && $enemy1.style.display === "none") {
-              $enemy1.style.display = "";
-              $enemy1.style.animation = "income1 1s linear ";
-              //   $enemy1.addEventListener("click", function (e) {
-              //     console.log(`${e.target} killed`);
-              //   });
-              comAttack(1);
-            } else if (showEnemy[1] === 1 && $enemy2.style.display === "none") {
-              $enemy2.style.display = "";
-              $enemy2.style.animation = "income2 1s linear ";
-              comAttack(2);
-            } else if (showEnemy[2] === 1 && $enemy3.style.display === "none") {
-              $enemy3.style.display = "";
-              $enemy3.style.animation = "income3 1s linear ";
-              comAttack(3);
+            if (enemyCount >= randomAmout) {
+            } else {
+              let nowCount = randomAmout - enemyCount;
+              while (nowCount !== 0) {
+                let willPut = Math.floor(Math.random() * 3);
+                if (showEnemy[willPut] === 0) {
+                  showEnemy[willPut] = 1;
+                  nowCount--;
+                }
+              }
             }
-          }
+
+            for (let i = 0; i < 3; i++) {
+              if (showEnemy[0] === 1 && $enemy1.style.display === "none") {
+                $enemy1.style.display = "";
+                $enemy1.style.animation = "income1 1s linear ";
+                //   $enemy1.addEventListener("click", function (e) {
+                //     console.log(`${e.target} killed`);
+                //   });
+                comAttack(1);
+              } else if (showEnemy[1] === 1 && $enemy2.style.display === "none") {
+                $enemy2.style.display = "";
+                $enemy2.style.animation = "income2 1s linear ";
+                comAttack(2);
+              } else if (showEnemy[2] === 1 && $enemy3.style.display === "none") {
+                $enemy3.style.display = "";
+                $enemy3.style.animation = "income3 1s linear ";
+                comAttack(3);
+              }
+            }
+          }, 2000);
+
           //시간을 랜덤으로 설정하는 방법 알아보기
-        }, 2);
+        }, 3000);
       }
       function comAttack(a) {
         setTimeout(() => {
           if (a === 1 && $enemy1.style.display === "" && showEnemy[0] === 1) {
             $enemyShot1.style.display = "";
             $life.textContent--;
-          }
-          if (a === 2 && $enemy2.style.display === "" && showEnemy[1] === 1) {
+          } else if (a === 2 && $enemy2.style.display === "" && showEnemy[1] === 1) {
             $enemyShot2.style.display = "";
             $life.textContent--;
-          }
-          if (a === 3 && $enemy3.style.display === "" && showEnemy[2] === 1) {
+          } else if (a === 3 && $enemy3.style.display === "" && showEnemy[2] === 1) {
             $enemyShot3.style.display = "";
             $life.textContent--;
+          }
+          if ($life.textContent <= 0) {
+            alert("졌습니다!");
+
+            $life.textContent = 5;
+            $enemyShot1.style.display = "none";
+            $enemy1.style.display = "none";
+            $enemyShot2.style.display = "none";
+            $enemy2.style.display = "none";
+            $enemyShot3.style.display = "none";
+            $enemy3.style.display = "none";
           }
         }, 2000);
         setTimeout(() => {
