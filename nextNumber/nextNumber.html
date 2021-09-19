@@ -83,9 +83,9 @@
 
     function fadeIn(element) {
       let fadeAmount = 0;
-      if (fadeAmount >= 1) {
-        clearInterval(fade);
-      }
+      // if (fadeAmount >= 1) {
+      //   clearInterval(fade);
+      // }
       let fade = setInterval(() => {
         //if문이 안에 들어와야함. clearinterval에 대해 더 찾아볼것.
         if (fadeAmount >= 1) {
@@ -130,11 +130,7 @@
     document.body.addEventListener("click", (e) => clickEvent(e));
 
     function clickEvent(e) {
-      if (
-        countAns.length === 15 &&
-        !countAns.includes(e.target.textContent) &&
-        clickable === true
-      ) {
+      if (countAns.length === 15 && !countAns.includes(e.target.textContent) && clickable === true) {
         //연타하면 16번이 계속 눌리는 버그가 있었음
         //이렇게 고치니 없어지긴 했는데 이유를 모르겠음.
         fadeIn(e.target);
@@ -176,12 +172,7 @@
 
         fadeIn(e.target);
         clickable = false;
-        if (
-          e.target.textContent === "1" ||
-          (countAns.length >= 1 &&
-            Number(countAns[countAns.length - 1]) ===
-              Number(e.target.textContent) - 1)
-        ) {
+        if (e.target.textContent === "1" || (countAns.length >= 1 && Number(countAns[countAns.length - 1]) === Number(e.target.textContent) - 1)) {
           countAns.push(e.target.textContent) &&
             setTimeout(() => {
               clickable = true;
