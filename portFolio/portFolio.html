@@ -136,21 +136,13 @@
       }
       #headerBackground {
         position: absolute;
-        width: 1440px;
+        width: 120%;
         height: 125px;
         left: 0px;
         top: 89px;
         background: #f6f892;
       }
-      #headerMain {
-        position: absolute;
-        width: 549px;
-        height: 125px;
-        left: 445px;
-        background: #ffc34e;
 
-        box-sizing: border-box;
-      }
       #contents {
         font-family: Roboto;
         font-style: normal;
@@ -177,11 +169,78 @@
         left: 230px;
       }
       #footerBackground {
-        position: fixed;
-        width: 1440px;
+        position: relative;
+        display: inline-block;
+        width: 100%;
         height: 397px;
-        bottom: 0;
+
         background: #f6f892;
+      }
+      #mainPJTitle {
+        position: relative;
+        top: 502px;
+        left: 64px;
+        font-size: 24px;
+      }
+
+      #mainPJphoto {
+        display: inline-block;
+        position: relative;
+        width: 500px;
+        height: 400px;
+      }
+      #mainPJphoto1 {
+        display: inline-block;
+        position: relative;
+        width: 700px;
+        height: 560px;
+      }
+      #mainPJphoto2 {
+        display: inline-block;
+        position: relative;
+        width: 700px;
+        height: 560px;
+      }
+      #toyPJTitle {
+        display: inline-block;
+        position: relative;
+
+        position: relative;
+        top: 502px;
+        left: 64px;
+        font-size: 24px;
+      }
+      #blogTitle {
+        display: inline-block;
+        position: relative;
+
+        top: 502px;
+        left: 64px;
+        font-size: 24px;
+      }
+      #embedPj {
+        display: inline-block;
+        position: relative;
+        width: 700px;
+        height: 560px;
+        background-color: #a9a9a9;
+      }
+      #blogBox {
+        display: inline-block;
+        position: relative;
+        width: 120%;
+        top: 502px;
+        left: 64px;
+        height: 560px;
+        background-color: darkcyan;
+      }
+      #mainBox {
+        display: inline-block;
+        position: relative;
+        width: 120%;
+
+        height: 560px;
+        background-color: cornsilk;
       }
     </style>
   </head>
@@ -190,12 +249,29 @@
       <div id="headerBackground"><span id="headerMain"></span></div>
     </header>
     <div id="contents"><span id="mainPJ">메인 프로젝트 소개</span><span id="toyPJ">토이 프로젝트</span><span id="blog">블로그 링크</span></div>
-    <div>
+    <div id="mainPJTitle">
       <div>메인 프로젝트 소개</div>
+      <div id="mainBox"></div>
+      <!-- <img src="./4. 다른사람 여행-h.png" alt="mainPJphoto" id="mainPJphoto" ></img> -->
+      <img src="./121807215-28640d00-cc8e-11eb-8eb4-5725e309d972.gif" id="mainPJphoto1" />
+      <img src="./121807896-0b7d0900-cc91-11eb-9640-f3387c09a2fb.gif" id="mainPJphoto2" />
     </div>
-
-    <footer>
+    <!-- <footer>
       <div id="footerBackground"></div>
-    </footer>
+    </footer> -->
+    <div>
+      <div id="toyPJTitle">
+        <div>토이 프로젝트</div>
+        <div>
+          <embed id="embedPj" src="https://lsh9955.github.io/JSproject/rich/rich(class).html" />
+          <embed id="embedPj" src="https://lsh9955.github.io/JSproject/snake/snake.html" />
+          <embed id="embedPj" src="https://lsh9955.github.io/JSproject/halliGalli/halliGalli.html" />
+        </div>
+      </div>
+    </div>
+    <div>
+      <div id="blogTitle">블로그 링크</div>
+      <div id="blogBox"></div>
+    </div>
   </body>
 </html>
