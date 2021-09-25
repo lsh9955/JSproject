@@ -242,13 +242,16 @@
         height: 560px;
         background-color: cornsilk;
       }
+      html {
+        scroll-behavior: smooth;
+      }
     </style>
   </head>
   <body>
     <header>
       <div id="headerBackground"><span id="headerMain"></span></div>
     </header>
-    <div id="contents"><span id="mainPJ">메인 프로젝트 소개</span><span id="toyPJ">토이 프로젝트</span><span id="blog">블로그 링크</span></div>
+    <div id="contents"><a href="#mainPJTitle" id="mainPJ">메인 프로젝트 소개</a><a href="#toyPJTitle" id="toyPJ">토이 프로젝트</a><a a href="#blogTitle" id="blog">블로그 링크</a></div>
     <div id="mainPJTitle">
       <div>메인 프로젝트 소개</div>
       <div id="mainBox"></div>
