@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <div>숫자범위</div>
+      <input type="text" id="nums" />
+
+      <div>찾는숫자</div>
+      <input type="text" id="targetNum" />
+      <button id="find">찾기</button>
+
+      <div id="outPut"></div>
+    </div>
+    <script>
+      document.getElementById("find").addEventListener("click", () => {
+        let a = Number(document.getElementById("nums").value);
+
+        let b = Number(document.getElementById("targetNum").value);
+        console.log(solution(a, b));
+        document.getElementById("outPut").textContent = solution(a, b);
+      });
+
+      function solution(num, target) {
+        let a = Array(num)
+          .fill()
+          .map((v, i) => String(i + 1));
+        let count = 0;
+
+        for (let i = 0; i < a.length; i++) {
+          for (let k = 0; k < a[i].length; k++) {
+            if (a[i][k] === String(target)) {
+              count++;
+            }
+          }
+        }
+        let answer = count;
+        return answer;
+      }
+    </script>
+  </body>
+</html>
